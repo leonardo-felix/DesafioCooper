@@ -1,6 +1,7 @@
 package lpfx.desafio.model;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -11,12 +12,8 @@ import java.io.Serializable;
 @Entity
 @Table
 @Data
-public class TorcedorTelefone implements Serializable {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int id;
-
+@EqualsAndHashCode(callSuper = true)
+public class TorcedorTelefone extends BaseModeloAbstrato {
     @NotNull
     @ManyToOne(optional = false)
     Torcedor torcedor;
@@ -26,8 +23,8 @@ public class TorcedorTelefone implements Serializable {
     TipoTelefone tipoTelefone;
 
     @NotBlank
-    @Pattern(regexp = "^[0-9]{8,9}$")
-    @Column(length = 9)
+    @Pattern(regexp = "^[0-9]{10,11}$")
+    @Column(length = 11, nullable = false)
     String numero;
 
     @Column(nullable = false)

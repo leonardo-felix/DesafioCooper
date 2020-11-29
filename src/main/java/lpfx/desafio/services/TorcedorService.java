@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface TorcedorService {
-    Optional<Torcedor> porCPF(String CPF);
-    Torcedor adicionar(Torcedor torcedor);
+    Optional<Torcedor> porCPF(final String CPF);
+    Torcedor adicionar(final Torcedor torcedor);
     List<Torcedor> todosTorcedores();
-    boolean existePorCPF(String CPF);
+    boolean existePorCPF(final String CPF);
 }

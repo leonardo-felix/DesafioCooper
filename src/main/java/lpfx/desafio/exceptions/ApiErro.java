@@ -1,7 +1,5 @@
 package lpfx.desafio.exceptions;
 
-import io.swagger.annotations.Api;
-import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
