@@ -15,7 +15,7 @@ import java.util.List;
 @Table
 @Data
 public class Torcedor extends BaseModeloAbstrato {
-    @CPF(message = "Inválido")
+    @CPF(message = "CPF Inválido")
     @NotNull
     @Column(unique = true, nullable = false, length = 11)
     private String cpf;

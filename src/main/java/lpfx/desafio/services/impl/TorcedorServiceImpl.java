@@ -1,6 +1,8 @@
 package lpfx.desafio.services.impl;
 
 import lombok.RequiredArgsConstructor;
+import lpfx.desafio.kafka.EnumTopicos;
+import lpfx.desafio.kafka.KafkaSender;
 import lpfx.desafio.model.Torcedor;
 import lpfx.desafio.repository.TorcedorRepository;
 import lpfx.desafio.services.TorcedorService;
@@ -15,6 +17,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class TorcedorServiceImpl implements TorcedorService {
     final TorcedorRepository torcedorRepository;
+    final KafkaSender kafkaSender;
 
     @Override
     @Transactional(readOnly = true)
@@ -32,6 +35,9 @@ public class TorcedorServiceImpl implements TorcedorService {
         }
         if(torcedor.getEndereco() != null){
             torcedor.getEndereco().setTorcedor(torcedor);
+        }
+        if(torcedor.getId() == null){
+            kafkaSender.sendMessage("Usuário de CPF " + torcedor.getCpf() + "Cadastrado", EnumTopicos.TORCEDOR_CADASTRADO.topico);
         }
         return torcedorRepository.adicionar(torcedor);
     }

@@ -59,7 +59,7 @@ export default class TorcedorForm extends Component {
       this.setState({tiposTelefones}) 
       // inicializa o primeiro caso não tenha telefone cadastrado ainda
       if(!this.state.telefones[0].id){
-        var {telefones} = this.state;
+        const {telefones} = this.state;
         telefones[0].principal = true;
         telefones[0].tipoTelefone = tiposTelefones[0]
         this.setState({telefones})
@@ -89,6 +89,7 @@ export default class TorcedorForm extends Component {
           numero:
             item.tipoTelefone.celular ? celularMask(item.numero) : telefoneMask(item.numero),
             tipoTelefone: item.tipoTelefone,
+            principal: item.principal
         };
       });
       this.setState({ ...res });
