@@ -1,19 +1,22 @@
 package lpfx.desafio.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lpfx.desafio.model.validators.TamanhoCelular;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-import java.io.Serializable;
 
 @Entity
 @Table
 @Data
 @EqualsAndHashCode(callSuper = true)
+@TamanhoCelular
 public class TorcedorTelefone extends BaseModeloAbstrato {
+    @JsonIgnore
     @NotNull
     @ManyToOne(optional = false)
     Torcedor torcedor;

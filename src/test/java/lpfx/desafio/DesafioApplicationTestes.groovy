@@ -1,7 +1,10 @@
 package lpfx.desafio
 
 import lpfx.desafio.controllers.TorcedorController
+import lpfx.desafio.model.TipoTelefone
 import lpfx.desafio.model.Torcedor
+import lpfx.desafio.model.TorcedorTelefone
+import lpfx.desafio.services.TipoTelefoneService
 import lpfx.desafio.services.TorcedorService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -13,6 +16,9 @@ import javax.validation.ConstraintViolationException
 class DesafioApplicationTestes extends Specification{
     @Autowired(required = false)
     private TorcedorController torcedorController;
+
+    @Autowired(required = false)
+    private TipoTelefoneService tipoTelefoneService;
 
     @Autowired(required = false)
     private TorcedorService torcedorService;
@@ -35,8 +41,6 @@ class DesafioApplicationTestes extends Specification{
         then:
             notThrown ConstraintViolationException
             torcedorGravado.getId() > 0
-
-
     }
 
     def "CPF Invalido"(){

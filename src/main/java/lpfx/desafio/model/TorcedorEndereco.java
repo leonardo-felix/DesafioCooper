@@ -14,14 +14,7 @@ import java.io.Serializable;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class TorcedorEndereco extends BaseModeloAbstrato {
-
-    /*
     @JsonIgnore
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "torcedor_id")
-    Torcedor torcedor;
-     */
-
     @OneToOne(optional = false)
     Torcedor torcedor;
 
@@ -33,7 +26,7 @@ public class TorcedorEndereco extends BaseModeloAbstrato {
     String logradouro;
     String complemento;
     String bairro;
-    String cidade;
+    String localidade;
 
     @Column(nullable = false)
     String UF;

@@ -47,4 +47,9 @@ public class TorcedorServiceImpl implements TorcedorService {
     public boolean existePorCPF(final String CPF) {
         return torcedorRepository.existePorCPF(CPF);
     }
+
+    @Override
+    public Optional<Torcedor> buscarPorId(final Long id) {
+        return torcedorRepository.findById(id);
+    }
 }

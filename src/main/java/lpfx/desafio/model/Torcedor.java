@@ -33,9 +33,4 @@ public class Torcedor extends BaseModeloAbstrato {
 
     @OneToOne(cascade = CascadeType.ALL)
     private TorcedorEndereco endereco;
-
-    /*
-    @OneToMany(mappedBy = "torcedor", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<TorcedorEndereco> enderecos;
-     */
 }

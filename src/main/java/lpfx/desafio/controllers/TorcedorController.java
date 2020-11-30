@@ -35,6 +35,15 @@ public class TorcedorController {
         return torcedorService.todosTorcedores();
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Torcedor> obterId(@PathVariable("id") Long id){
+        Optional<Torcedor> optionalTorcedor = torcedorService.buscarPorId(id);
+        if(optionalTorcedor.isEmpty()){
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(optionalTorcedor.get());
+    }
+
     @GetMapping(value = "/obterPorCPF/{CPF}", produces = "application/json")
     public ResponseEntity<Torcedor> obterPorCPF(@PathVariable("CPF") @NotBlank @Size(min = 11, max = 11, message = "CPF não tem 11 dígitos") String CPF) {
         logger.debug("GET obterPorCPF: {}", CPF);
@@ -72,7 +81,7 @@ public class TorcedorController {
 
     @PutMapping
     public ResponseEntity<?> alterar(@RequestBody Torcedor torcedor){
-        logger.debug("POST adicionarTorcedor: {}", torcedor);
+        logger.debug("POST alterTorcedor: {}", torcedor);
         return ResponseEntity.ok(torcedorService.adicionar(torcedor));
     }
 
