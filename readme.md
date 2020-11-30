@@ -10,3 +10,10 @@ Para executar a aplicação, basta executar o docker composer
 ```
 docker-composer up --build
 ```
+
+Após os serviços subirem, a aplicação estará disponível em http://localhost:3000/
+
+login: ````admin```` <br />
+senha: ````123456````
+
+**A cada inicialização do serviço recria as tabelas, portanto os dados serão reiniciados**
