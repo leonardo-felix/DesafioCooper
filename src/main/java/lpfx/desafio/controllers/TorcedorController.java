@@ -4,11 +4,12 @@ import lombok.RequiredArgsConstructor;
 import lpfx.desafio.exceptions.ApiErro;
 import lpfx.desafio.model.Torcedor;
 import lpfx.desafio.model.TorcedorTelefone;
+import lpfx.desafio.model.Usuario;
+import lpfx.desafio.repository.LogRepository;
 import lpfx.desafio.services.impl.TorcedorServiceImpl;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.CollectionUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -27,24 +28,31 @@ import java.util.Optional;
 @Validated
 @RolesAllowed({"ADMIN"})
 public class TorcedorController {
-    private final Logger logger = LoggerFactory.getLogger(TorcedorController.class);
     final TorcedorServiceImpl torcedorService;
+    final LogRepository logRepository;
+
+    private void gerarLog(String descricao){
+        Usuario usuario = (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        logRepository.adicionarLog(descricao, usuario);
+    }
 
     @GetMapping
     public List<Torcedor> todosTorcedores(){
-        logger.debug("GET todosTorcedores");
+        gerarLog("GET todosTorcedores");
         return torcedorService.todosTorcedores();
     }
 
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> excluir(@PathVariable("id") Long id){
+        gerarLog("Excluindo torcedor id " + id);
         torcedorService.excluir(id);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Torcedor> obterId(@PathVariable("id") Long id){
+        gerarLog("Obtendo torcedor id " + id);
         Optional<Torcedor> optionalTorcedor = torcedorService.buscarPorId(id);
         if(optionalTorcedor.isEmpty()){
             return ResponseEntity.noContent().build();
@@ -54,7 +62,7 @@ public class TorcedorController {
 
     @GetMapping(value = "/obterPorCPF/{CPF}", produces = "application/json")
     public ResponseEntity<Torcedor> obterPorCPF(@PathVariable("CPF") @NotBlank @Size(min = 11, max = 11, message = "CPF não tem 11 dígitos") String CPF) {
-        logger.debug("GET obterPorCPF: {}", CPF);
+        gerarLog("GET obterPorCPF: " + CPF);
 
         Optional<Torcedor> torcedorOptional = torcedorService.porCPF(CPF);
 
@@ -67,7 +75,7 @@ public class TorcedorController {
 
     @PostMapping
     public ResponseEntity<?> adicionarTorcedor(@Valid @RequestBody Torcedor torcedor){
-        logger.debug("POST adicionarTorcedor: {}", torcedor);
+        gerarLog("POST adicionarTorcedor: " + torcedor.toString());
 
         // Validações básicas
         if(torcedorService.existePorCPF(torcedor.getCpf())){
@@ -89,7 +97,7 @@ public class TorcedorController {
 
     @PutMapping
     public ResponseEntity<?> alterar(@Valid @RequestBody Torcedor torcedor){
-        logger.debug("POST alterTorcedor: {}", torcedor);
+        gerarLog("POST alterTorcedor: {}" + torcedor);
         return ResponseEntity.ok(torcedorService.adicionar(torcedor));
     }
 
