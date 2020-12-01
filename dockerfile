@@ -1,6 +1,12 @@
 FROM maven:3.6-jdk-11 AS build
-COPY src /usr/src/app/src  
-COPY pom.xml /usr/src/app  
+
+# Layer de download das dependencies
+WORKDIR /usr/src/app
+ADD pom.xml pom.xml
+RUN mvn verify clean --fail-never
+
+# Layer de compilacao
+COPY src /usr/src/app/src
 RUN mvn -f /usr/src/app/pom.xml clean package
 
 FROM adoptopenjdk/openjdk11:latest

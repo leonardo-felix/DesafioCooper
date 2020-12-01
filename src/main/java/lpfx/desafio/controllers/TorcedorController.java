@@ -6,6 +6,8 @@ import lpfx.desafio.model.Torcedor;
 import lpfx.desafio.model.TorcedorTelefone;
 import lpfx.desafio.model.Usuario;
 import lpfx.desafio.repository.LogRepository;
+import lpfx.desafio.repository.UsuarioRepository;
+import lpfx.desafio.security.UserDetailsImpl;
 import lpfx.desafio.services.impl.TorcedorServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,9 +32,11 @@ import java.util.Optional;
 public class TorcedorController {
     final TorcedorServiceImpl torcedorService;
     final LogRepository logRepository;
+    final UsuarioRepository usuarioRepository;
 
     private void gerarLog(String descricao){
-        Usuario usuario = (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Usuario usuario = usuarioRepository.findByLogin(userDetails.getUsername()).orElseThrow();
         logRepository.adicionarLog(descricao, usuario);
     }
 
@@ -75,7 +79,7 @@ public class TorcedorController {
 
     @PostMapping
     public ResponseEntity<?> adicionarTorcedor(@Valid @RequestBody Torcedor torcedor){
-        gerarLog("POST adicionarTorcedor: " + torcedor.toString());
+        gerarLog("POST adicionarTorcedor: " + torcedor.getCpf());
 
         // Validações básicas
         if(torcedorService.existePorCPF(torcedor.getCpf())){
@@ -97,7 +101,7 @@ public class TorcedorController {
 
     @PutMapping
     public ResponseEntity<?> alterar(@Valid @RequestBody Torcedor torcedor){
-        gerarLog("POST alterTorcedor: {}" + torcedor);
+        gerarLog("POST alterTorcedor: {}" + torcedor.getCpf());
         return ResponseEntity.ok(torcedorService.adicionar(torcedor));
     }
 

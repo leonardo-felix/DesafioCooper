@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode(callSuper = true)
 public class Log extends BaseModeloAbstrato {
     @NotBlank
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String descricao;
 
     @ManyToOne(optional = false)

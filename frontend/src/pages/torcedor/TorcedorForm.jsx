@@ -36,7 +36,7 @@ import Alert from 'react-bootstrap/Alert'
 const TELEFONE_PADRAO = { numero: '', tipoTelefone: {id: null, descricao: '', celular: false}, principal: false };
 
 export default class TorcedorForm extends Component {
-  clienteId;
+  torcedorId;
 
   isView = false;
 
@@ -76,12 +76,12 @@ export default class TorcedorForm extends Component {
     }
 
     if (id) {
-      this.initCliente(id);
+      this.initTorcedor(id);
     }
   };
 
-  initCliente = id => {
-    this.clienteId = id;
+  initTorcedor = id => {
+    this.torcedorId = id;
     getOne(id).then(res => {
       res.cpf = cpfMask(res.cpf);
       res.cep = cepMask(res.endereco.cep);
@@ -102,7 +102,7 @@ export default class TorcedorForm extends Component {
     const { nome } = this.state;
 
     return (
-      <Form.Group controlId="id-cliente_form_nome">
+      <Form.Group controlId="id-torcedor_form_nome">
         <Form.Label>Nome</Form.Label>
         <Form.Control
           required
@@ -111,7 +111,7 @@ export default class TorcedorForm extends Component {
           maxLength="100"
           type="text"
           value={nome}
-          placeholder="Nome do cliente"
+          placeholder="Nome do torcedor"
         />
       </Form.Group>
     );
@@ -121,14 +121,14 @@ export default class TorcedorForm extends Component {
     const { cpf } = this.state;
 
     return (
-      <Form.Group controlId="id-cliente_form_cpf">
+      <Form.Group controlId="id-torcedor_form_cpf">
         <Form.Label>CPF</Form.Label>
         <Form.Control
           required
           onChange={this.handleCPFtChange}
           value={cpf}
           type="text"
-          placeholder="CPF do cliente"
+          placeholder="CPF do torcedor"
         />
       </Form.Group>
     );
@@ -138,7 +138,7 @@ export default class TorcedorForm extends Component {
     const { email } = this.state;
 
     return (
-      <Form.Group controlId="id-cliente_form_email">
+      <Form.Group controlId="id-torcedor_form_email">
         <Form.Label>E-mail</Form.Label>
         <InputGroup className="pb-2">
               <Form.Control
@@ -146,7 +146,7 @@ export default class TorcedorForm extends Component {
                 onChange={e => this.handleGenericChange(e, "email")}
                 type="email"
                 value={email}
-                placeholder="E-mail do cliente"
+                placeholder="E-mail do torcedor"
               />
             </InputGroup>
       </Form.Group>
@@ -157,7 +157,7 @@ export default class TorcedorForm extends Component {
     const { telefones, tiposTelefones } = this.state;
 
     return (
-      <Form.Group controlId="id-cliente_form_telefone">
+      <Form.Group controlId="id-torcedor_form_telefone">
         <Form.Label>Telefone</Form.Label>
         {telefones.map((item, index) => {
           let tipoTelefoneSelecionada = item.tipoTelefone;
@@ -169,7 +169,7 @@ export default class TorcedorForm extends Component {
             // eslint-disable-next-line react/no-array-index-key
             <InputGroup className="pb-5" key={index}>
               <InputGroup.Prepend>
-                <DropdownButton id="id-cliente_form_telefone_tipo" variant="success" title={tipoTelefoneSelecionada.descricao}>
+                <DropdownButton id="id-torcedor_form_telefone_tipo" variant="success" title={tipoTelefoneSelecionada.descricao}>
                   {tiposTelefones.map((tt, ttindex) => {
                     return (
                     <Dropdown.Item key={`${ttindex}-${index}`} onClick={() =>this.onTipoTelefoneSelected(tt, index)}> 
@@ -185,7 +185,7 @@ export default class TorcedorForm extends Component {
                 type="text"
                 maxLength={this.handleTelefoneMaxLength(item.tipoTelefone)}
                 value={item.numero}
-                placeholder="Telefone do cliente"
+                placeholder="Telefone do torcedor"
               />
               {this.buildRemoveButton(() => this.onRemovingTelefone(index))}
 
@@ -219,7 +219,7 @@ export default class TorcedorForm extends Component {
     const { cep } = this.state.endereco;
 
     return (
-      <Form.Group controlId="id-cliente_form_cep">
+      <Form.Group controlId="id-torcedor_form_cep">
         <Form.Label>CEP</Form.Label>
         <InputGroup className="pb-2">
           <Form.Control
@@ -248,7 +248,7 @@ export default class TorcedorForm extends Component {
     const { logradouro } = this.state.endereco;
 
     return (
-      <Form.Group controlId="id-cliente_form_logradouro">
+      <Form.Group controlId="id-torcedor_form_logradouro">
         <Form.Label>Logradouro</Form.Label>
         <Form.Control
           required
@@ -265,7 +265,7 @@ export default class TorcedorForm extends Component {
     const { bairro } = this.state.endereco;
 
     return (
-      <Form.Group controlId="id-cliente_form_bairro">
+      <Form.Group controlId="id-torcedor_form_bairro">
         <Form.Label>Bairro</Form.Label>
         <Form.Control
           required
@@ -282,7 +282,7 @@ export default class TorcedorForm extends Component {
     const { localidade } = this.state.endereco;
 
     return (
-      <Form.Group controlId="id-cliente_form_localidade">
+      <Form.Group controlId="id-torcedor_form_localidade">
         <Form.Label>Cidade</Form.Label>
         <Form.Control
           required
@@ -299,9 +299,9 @@ export default class TorcedorForm extends Component {
     const { uf } = this.state.endereco;
 
     return (
-      <Form.Group controlId="id-cliente_form_uf">
+      <Form.Group controlId="id-torcedor_form_uf">
         <Form.Label>UF</Form.Label>
-        <DropdownButton id="id-cliente_form_uf_dropdown" title={uf}>
+        <DropdownButton id="id-torcedor_form_uf_dropdown" title={uf}>
           {UFS.map(item => {
             return (
               <Dropdown.Item
@@ -321,7 +321,7 @@ export default class TorcedorForm extends Component {
     const { complemento } = this.state.endereco;
 
     return (
-      <Form.Group controlId="id-cliente_form_complemento">
+      <Form.Group controlId="id-torcedor_form_complemento">
         <Form.Label>Complemento</Form.Label>
         <Form.Control
           onChange={e => this.handleGenericChange(e, 'complemento')}
@@ -470,7 +470,7 @@ export default class TorcedorForm extends Component {
       item.numero = normalizeTelefone(item.numero);
     });
 
-    if (this.clienteId) {
+    if (this.torcedorId) {
       // eslint-disable-next-line react/prop-types
       updateTorcedor(userToSave).then(() => history.push('/home'));
     } else {
@@ -498,7 +498,7 @@ export default class TorcedorForm extends Component {
               </Alert>
               <Row className="justify-content-center">
                 <Col md="6" col="12">
-                  <legend>Dados do Cliente</legend>
+                  <legend>Dados do Torcedor</legend>
                   {this.buildNomeInput()}
                   {this.buildCPFInput()}
                 </Col>

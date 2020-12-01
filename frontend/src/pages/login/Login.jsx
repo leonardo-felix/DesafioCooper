@@ -8,6 +8,7 @@ import Row from 'react-bootstrap/Row';
 import Container from 'react-bootstrap/Container';
 import singIn from '../../resources/login.resource';
 import { saveUser } from '../../services/auth.service';
+import Alert from "react-bootstrap/Alert";
 
 export default class Login extends Component {
   constructor(props) {
@@ -15,7 +16,7 @@ export default class Login extends Component {
     this.state = {
       login: '',
       senha: '',
-      error: null,
+      error: '',
     };
   }
 
@@ -26,10 +27,16 @@ export default class Login extends Component {
   onSubmit = async e => {
     e.preventDefault();
     try {
-      const res = await singIn(this.state);
-      saveUser(res.headers.authorization);
-      const { history } = this.props;
-      history.push('/home');
+      singIn(this.state).then(res => {
+        saveUser(res.headers.authorization);
+        const { history } = this.props;
+        history.push('/home');
+      })
+          .catch(err => {
+            if(err.response.status === 403){
+              this.setState({error: "Usuário ou senha inválidos"})
+            }
+          });
     } catch (err) {
       console.error('Error ao realizar login: ', err);
     }
@@ -42,6 +49,12 @@ export default class Login extends Component {
           <Container className="container-fluid">
             <Row className="justify-content-md-center align-items-center vh-100">
               <Col md="12" lg="4">
+                <Alert variant="danger" show={this.state.error} onClose={() => this.setState({error: ""})} dismissible>
+                  <Alert.Heading>Ops, temos um erro!</Alert.Heading>
+                  <p>
+                    { this.state.error }
+                  </p>
+                </Alert>
                 <Form.Group controlId="id-login_form">
                   <Form.Label>Login</Form.Label>
                   <Form.Control
