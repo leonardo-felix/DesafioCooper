@@ -31,6 +31,7 @@ import {
   getOne,
   updateTorcedor,
 } from '../../resources/torcedor.resourse';
+import Alert from 'react-bootstrap/Alert'
 
 const TELEFONE_PADRAO = { numero: '', tipoTelefone: {id: null, descricao: '', celular: false}, principal: false };
 
@@ -41,10 +42,11 @@ export default class TorcedorForm extends Component {
 
   constructor(props) {
     super(props);
-    var telefone = {...TELEFONE_PADRAO};
+    const telefone = {...TELEFONE_PADRAO};
     telefone.principal = false;
 
     this.state = {
+      erro: '',
       endereco: {cep: '', logradouro: '', bairro: '', localidade: '', uf: '', complemento: '', cepNotFound: false},
       nome: '',
       cpf: '',
@@ -158,7 +160,7 @@ export default class TorcedorForm extends Component {
       <Form.Group controlId="id-cliente_form_telefone">
         <Form.Label>Telefone</Form.Label>
         {telefones.map((item, index) => {
-          var tipoTelefoneSelecionada = item.tipoTelefone;
+          let tipoTelefoneSelecionada = item.tipoTelefone;
           if(!tipoTelefoneSelecionada.id && tiposTelefones.length > 0){
             tipoTelefoneSelecionada = tiposTelefones[0];
           }
@@ -364,7 +366,7 @@ export default class TorcedorForm extends Component {
   };
 
   handleCEPChange = e =>  {
-    var endereco = {...this.state.endereco}
+    const endereco = {...this.state.endereco};
     endereco.cep = cepMask(e.target.value)
     this.setState({endereco});
   };
@@ -401,28 +403,14 @@ export default class TorcedorForm extends Component {
     return 14;
   };
 
-  onAddingMoreEmails = () => {
-    const { emails } = this.state;
-
-    this.setState({ emails: [...emails, { email: '' }] });
-  };
-
   onAddingMoreTelefones = () => {
     const { telefones } = this.state;
 
-    var tel = {...TELEFONE_PADRAO};
+    const tel = {...TELEFONE_PADRAO};
 
     this.setState({
       telefones: [...telefones, tel],
     });
-  };
-
-  onRemovingEmail = index => {
-    const { emails } = this.state;
-    if (emails.length === 1) return;
-
-    emails.splice(index, 1);
-    this.setState({ emails });
   };
 
   onRemovingTelefone = index => {
@@ -434,7 +422,7 @@ export default class TorcedorForm extends Component {
   };
 
   onUFSelection = uf => {
-    var endereco = {...this.state.endereco};
+    const endereco = {...this.state.endereco};
     endereco.uf = uf;
     this.setState({ endereco });
   };
@@ -455,7 +443,7 @@ export default class TorcedorForm extends Component {
     this.setState({ cepNotFound: false });
 
     Object.keys(cep).forEach(key => {
-      var endereco = {...this.state.endereco};
+      const endereco = {...this.state.endereco};
       endereco[key] = cep[key];
       this.setState({ endereco });
     });
@@ -487,7 +475,11 @@ export default class TorcedorForm extends Component {
       updateTorcedor(userToSave).then(() => history.push('/home'));
     } else {
       // eslint-disable-next-line react/prop-types
-      createTorcedor(userToSave).then(() => history.push('/home'));
+      createTorcedor(userToSave)
+          .then(() => history.push('/home'))
+          .catch(err => {
+            this.setState({erro: err.response.data.mensagem})
+          });
     }
   };
 
@@ -498,6 +490,12 @@ export default class TorcedorForm extends Component {
         <fieldset disabled={this.isView}>
           <Form onSubmit={this.onSubmission}>
             <Container className="container-fluid pt-3 pb-4">
+              <Alert variant="danger" show={this.state.erro} onClose={() => this.setState({erro: ""})} dismissible>
+                <Alert.Heading>Ops, temos um erro!</Alert.Heading>
+                <p>
+                  { this.state.erro }
+                </p>
+              </Alert>
               <Row className="justify-content-center">
                 <Col md="6" col="12">
                   <legend>Dados do Cliente</legend>

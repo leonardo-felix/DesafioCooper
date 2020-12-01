@@ -14,6 +14,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.RolesAllowed;
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.List;
@@ -33,6 +34,13 @@ public class TorcedorController {
     public List<Torcedor> todosTorcedores(){
         logger.debug("GET todosTorcedores");
         return torcedorService.todosTorcedores();
+    }
+
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> excluir(@PathVariable("id") Long id){
+        torcedorService.excluir(id);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/{id}")
@@ -58,7 +66,7 @@ public class TorcedorController {
     }
 
     @PostMapping
-    public ResponseEntity<?> adicionarTorcedor(@RequestBody Torcedor torcedor){
+    public ResponseEntity<?> adicionarTorcedor(@Valid @RequestBody Torcedor torcedor){
         logger.debug("POST adicionarTorcedor: {}", torcedor);
 
         // Validações básicas
@@ -80,7 +88,7 @@ public class TorcedorController {
     }
 
     @PutMapping
-    public ResponseEntity<?> alterar(@RequestBody Torcedor torcedor){
+    public ResponseEntity<?> alterar(@Valid @RequestBody Torcedor torcedor){
         logger.debug("POST alterTorcedor: {}", torcedor);
         return ResponseEntity.ok(torcedorService.adicionar(torcedor));
     }

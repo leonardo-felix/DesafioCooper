@@ -11,4 +11,5 @@ public interface TorcedorService {
     List<Torcedor> todosTorcedores();
     boolean existePorCPF(final String CPF);
     Optional<Torcedor> buscarPorId(final Long id);
+    void excluir(final Long id);
 }

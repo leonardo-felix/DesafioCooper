@@ -1,5 +1,6 @@
 package lpfx.desafio.kafka;
 
+import lpfx.desafio.model.Torcedor;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,12 +29,12 @@ class KafkaProducerConfig {
     }
 
     @Bean
-    public ProducerFactory<String, String> producerFactory() {
+    public ProducerFactory<String, Torcedor> producerFactory() {
         return new DefaultKafkaProducerFactory<>(producerConfigs());
     }
 
     @Bean
-    public KafkaTemplate<String, String> kafkaTemplate() {
+    public KafkaTemplate<String, Torcedor> kafkaTemplate() {
         return new KafkaTemplate<>(producerFactory());
     }
 }

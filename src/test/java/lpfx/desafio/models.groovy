@@ -14,6 +14,6 @@ class models {
     static Torcedor torcedorCPFInvalido(){
         def torcedor = torcedorValido()
         torcedor.setCpf("02104110155")
-        return torcedor;
+        return torcedor
     }
 }

@@ -15,13 +15,13 @@ import javax.validation.ConstraintViolationException
 @SpringBootTest
 class DesafioApplicationTestes extends Specification{
     @Autowired(required = false)
-    private TorcedorController torcedorController;
+    private TorcedorController torcedorController
 
     @Autowired(required = false)
-    private TipoTelefoneService tipoTelefoneService;
+    private TipoTelefoneService tipoTelefoneService
 
     @Autowired(required = false)
-    private TorcedorService torcedorService;
+    private TorcedorService torcedorService
 
     def "Testar Criacao contexto"() {
         expect: "O torcedorController ser criado"

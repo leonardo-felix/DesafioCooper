@@ -1,7 +1,7 @@
 package lpfx.desafio.services.impl;
 
 import lombok.RequiredArgsConstructor;
-import lpfx.desafio.kafka.EnumTopicos;
+import lpfx.desafio.exceptions.ErroInternoException;
 import lpfx.desafio.kafka.KafkaSender;
 import lpfx.desafio.model.Torcedor;
 import lpfx.desafio.repository.TorcedorRepository;
@@ -36,10 +36,11 @@ public class TorcedorServiceImpl implements TorcedorService {
         if(torcedor.getEndereco() != null){
             torcedor.getEndereco().setTorcedor(torcedor);
         }
-        if(torcedor.getId() == null){
-            kafkaSender.sendMessage("Usuário de CPF " + torcedor.getCpf() + "Cadastrado", EnumTopicos.TORCEDOR_CADASTRADO.topico);
-        }
-        return torcedorRepository.adicionar(torcedor);
+
+        Torcedor torcedorRetorno = torcedorRepository.adicionar(torcedor);
+        kafkaSender.eventoCadastrado(torcedorRetorno);
+
+        return torcedorRetorno;
     }
 
     @Override
@@ -57,5 +58,18 @@ public class TorcedorServiceImpl implements TorcedorService {
     @Override
     public Optional<Torcedor> buscarPorId(final Long id) {
         return torcedorRepository.findById(id);
+    }
+
+    @Override
+    @Transactional
+    public void excluir(Long id) {
+        Optional<Torcedor> torcedor = torcedorRepository.findById(id);
+
+        if(torcedor.isEmpty())
+            throw new ErroInternoException("ID não encontrado");
+
+        torcedorRepository.deleteById(id);
+
+        kafkaSender.eventoDesligado(torcedor.get());
     }
 }

@@ -2,9 +2,7 @@ package lpfx.desafio.controllers;
 
 import lombok.RequiredArgsConstructor;
 import lpfx.desafio.model.TipoTelefone;
-import lpfx.desafio.model.Torcedor;
 import lpfx.desafio.services.TipoTelefoneService;
-import lpfx.desafio.services.impl.TorcedorServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.validation.annotation.Validated;

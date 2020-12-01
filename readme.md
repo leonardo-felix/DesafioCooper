@@ -16,4 +16,4 @@ Após os serviços subirem, a aplicação estará disponível em http://localhos
 login: ````admin```` <br />
 senha: ````123456````
 
-**A cada inicialização do serviço recria as tabelas, portanto os dados serão reiniciados**
+**\* Atenção: A cada inicialização do serviço recria as tabelas, portanto os dados serão reiniciados**
